@@ -96,12 +96,6 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
-        # bot.send_message(
-        #     message.chat.id,
-        #     """С ДЭЛ-150: enter -> рабочие параметры -> выбираем нужный датчик газа -> установака нуля
-        #     С Датчика: зажимаем меню -> градуировка -> пгу-1 -> устанвока нуля -> пароль 0007 -> ввод""",
-        #     reply_markup=markup,
-        # )
         bot.send_video(
             message.chat.id,
             open("./del150/obnulenie.mp4", "rb"),
@@ -123,21 +117,12 @@ def get_text_messages(message):
             caption="https://www.pla.ru/service/tehpodderzhka/instrukciya-po-nastroike/tablica-adresov-del-150/",
             parse_mode="html",
         )
-        # bot.send_message(
-        #     message.chat.id,
-        #     "https://www.pla.ru/service/tehpodderzhka/instrukciya-po-nastroike/tablica-adresov-del-150/",
-        #     reply_markup=markup,
-        # )
+
         # Дэл-150
     elif message.text == "Тарировка дола":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
-        # bot.send_message(
-        #     message.chat.id,
-        #     "с двумя точками: enter -> рабочие параметры -> скорость сп -> калировка датчика -> установка нуля -> отбиваем верхнюю точку (25м)",
-        #     reply_markup=markup,
-        # )
         bot.send_photo(
             message.chat.id,
             open("./del150/shem/del_dol_kolibrovka.png", "rb"),
@@ -151,11 +136,6 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
-        # bot.send_message(
-        #     message.chat.id,
-        #     "взять айпишник с компа мастера, в той же программе",
-        #     reply_markup=markup,
-        # )
         bot.send_video(
             message.chat.id,
             open("./del150/nastroiki_pc.mp4", "rb"),
@@ -169,11 +149,6 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
-        # bot.send_message(
-        #     message.chat.id,
-        #     "Инструкция как снять или загрузить данные с программы",
-        #     reply_markup=markup,
-        # )
         bot.send_video(
             message.chat.id,
             open("./del150/ecsport_import.mp4", "rb"),
@@ -300,12 +275,6 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Распайки")
         markup.add(button)
-        # bot.send_message(
-        #     message.chat.id,
-        #     " ",
-        #     reply_markup=markup,
-        #     parse_mode="html",
-        # ),
         bot.send_photo(
             message.chat.id,
             open("./del150/blokirovki.jpg", "rb"),
@@ -502,7 +471,7 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         btn1 = types.KeyboardButton("Наладка Щиты")
         btn2 = types.KeyboardButton("Ошибки Щиты")
-        btn3 = types.KeyboardButton("Схемы Щиты")
+        btn3 = types.KeyboardButton("Схемы и длина кабелей Щиты")
         markup.add(btn1, btn2, btn3)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
@@ -516,7 +485,7 @@ def get_text_messages(message):
             "При наладке щита:\n"
             "1) включать автоматы последовательно слева направо(и наоборот при выключении)\n"
             "2) для настройки уровней можно не включать маленький автомат(отвечает за блокировки, включение/выключение насосов)\n"
-            "3) очень чувствительное пламя, возможно придется корректировать направление трубки пламени\n",
+            "3) очень чувствительное пламя, возможно придется корректировать направление трубки пламени",
             reply_markup=markup,
             parse_mode="html",
         ),
@@ -530,19 +499,19 @@ def get_text_messages(message):
             message.chat.id,
             "1) Ошибки сбрасываются кнопкой СБРОС, при условии, что датчик пламени и экм работают стабильно и не находятся в сработке.\n"
             "2) Нижний и верхний аварийный сбрасываются автоматически при наборе/сбросе воды.\n"
-            "3) Сирену можно выключить, выключив маленький автомат(отвечает за блокировки, включение/выключение насосов), при этом насосы не будут включаться и выключаться, на отсекателе должен стоять болт\n",
+            "3) Сирену можно выключить, выключив маленький автомат(отвечает за блокировки, включение/выключение насосов), при этом насосы не будут включаться и выключаться, на отсекателе должен стоять болт",
             reply_markup=markup,
             parse_mode="html",
         ),
 
         # Котельная
-    elif message.text == "Схемы Щиты":
+    elif message.text == "Схемы и длина кабелей Щиты":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Новые щиты")
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            # open("./kotel/shem_argus.jpg", "rb"),
+            open("./kotel/dlina_kabel.jpg", "rb"),
             reply_markup=markup,
         )
 
