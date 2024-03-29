@@ -19,7 +19,8 @@ def get_text_messages(message):
     btn3 = types.KeyboardButton("Котельные")
     btn4 = types.KeyboardButton("Переносной газик")
     btn5 = types.KeyboardButton("Схемы")
-    markup.row(btn1, btn2, btn3, btn4, btn5)
+    btn6 = types.KeyboardButton("Документация, акта")
+    markup.row(btn1, btn2, btn3, btn4, btn5, btn6)
     bot.send_message(message.chat.id, "Напиши, что тебе нужно", reply_markup=markup)
 
 
@@ -27,22 +28,23 @@ def get_text_messages(message):
 def get_text_messages(message):
     # Главное меню
     if message.text == "Главное меню" or message.text == "🔙 Главное меню":
-        markup = types.ReplyKeyboardMarkup()
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=False)
         btn1 = types.KeyboardButton("Дэл-150")
         btn2 = types.KeyboardButton("Куб-2")
         btn3 = types.KeyboardButton("Котельные")
         btn4 = types.KeyboardButton("Переносной газик")
         btn5 = types.KeyboardButton("Схемы")
-        markup.row(btn1, btn2, btn3, btn4, btn5)
+        btn6 = types.KeyboardButton("Документация, акта")
+        markup.add(btn1, btn2, btn3, btn4, btn5, btn6)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Дэл-150
     elif message.text == "Дэл-150" or message.text == "🔙 вернуться в раздел Дэл-150":
-        markup = types.ReplyKeyboardMarkup()
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         btn0 = types.KeyboardButton("🔙 Главное меню")
-        btn1 = types.KeyboardButton("Как поменять адрес датчика")
-        btn2 = types.KeyboardButton("Как поменять порог")
-        btn3 = types.KeyboardButton("Как обнулить значения газа")
+        btn1 = types.KeyboardButton("Изменение адреса")
+        btn2 = types.KeyboardButton("Изменение порога")
+        btn3 = types.KeyboardButton("Обнуление газа")
         btn4 = types.KeyboardButton("Список адересов")
         btn5 = types.KeyboardButton("Тарировка дола")
         btn6 = types.KeyboardButton("Настройка ПК")
@@ -52,6 +54,7 @@ def get_text_messages(message):
         btn10 = types.KeyboardButton("Обнуление")
         btn11 = types.KeyboardButton("Импорт/экспорт истории")
         btn12 = types.KeyboardButton("Монтаж моментомера")
+        btn13 = types.KeyboardButton("Настройка модемов")
         markup.add(
             btn1,
             btn2,
@@ -65,12 +68,13 @@ def get_text_messages(message):
             btn10,
             btn11,
             btn12,
+            btn13,
             btn0,
         )
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Дэл-150
-    elif message.text == "Как поменять адрес датчика":
+    elif message.text == "Изменение адреса":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
@@ -81,7 +85,7 @@ def get_text_messages(message):
         )
 
         # Дэл-150
-    elif message.text == "Как поменять порог":
+    elif message.text == "Изменение порога":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
@@ -92,15 +96,20 @@ def get_text_messages(message):
         )
 
         # Дэл-150
-    elif message.text == "Как обнулить значения газа":
+    elif message.text == "Обнуление газа":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
+        bot.send_message(
+            message.chat.id,
+            "Идет загрузка видео",
+            reply_markup=markup,
+        )
         bot.send_video(
             message.chat.id,
             open("./del150/obnulenie.mp4", "rb"),
             reply_markup=markup,
-            caption="(Идет загрузка видео)С ДЭЛ-150: enter -> рабочие параметры -> выбираем нужный датчик газа -> установака нуля\n"
+            caption="С ДЭЛ-150: enter -> рабочие параметры -> выбираем нужный датчик газа -> установака нуля\n"
             "С Датчика: зажимаем меню -> градуировка -> пгу-1 -> устанвока нуля -> пароль 0007 -> ввод",
             parse_mode="html",
         )
@@ -136,11 +145,16 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
+        bot.send_message(
+            message.chat.id,
+            "Идет загрузка видео",
+            reply_markup=markup,
+        )
         bot.send_video(
             message.chat.id,
             open("./del150/nastroiki_pc.mp4", "rb"),
             reply_markup=markup,
-            caption="(Идет загрузка видео)взять айпишник с компа мастера, в той же программе",
+            caption="взять айпишник с компа мастера, в той же программе",
             parse_mode="html",
         )
 
@@ -149,11 +163,16 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
+        bot.send_message(
+            message.chat.id,
+            "Идет загрузка видео",
+            reply_markup=markup,
+        )
         bot.send_video(
             message.chat.id,
             open("./del150/ecsport_import.mp4", "rb"),
             reply_markup=markup,
-            caption="(Идет загрузка видео)Инструкция как снять или загрузить данные с программы",
+            caption="Инструкция как снять или загрузить данные с программы",
             parse_mode="html",
         )
 
@@ -174,6 +193,107 @@ def get_text_messages(message):
         )
 
         # Дэл-150
+    elif message.text == "Настройка модемов":
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
+        markup.add(button)
+        bot.send_message(
+            message.chat.id,
+            "Для подключения на ПК следует обновить до последней версии ПО и так же прописать адрес (можно использовать 192.168.1.1 тогда как в ДЭЛ-150 будет 192.168.1.2, шлюз 192.168.1.20) в настройках сети IPv4 тот который будет указан в ДЭЛ-150.\n"
+            "Для подключения модемов следует выставить на ДЭЛ-150 шлюз 192.168.1.20 и так же прописать IP пк в соединениях в PLAOUT.\n"
+            "В программе выставляем IP адрес ДЭЛ-150\n",
+            reply_markup=markup,
+        )
+        photos = [
+            "del150/modemi/photo_1.jpg",
+            "del150/modemi/photo_2.jpg",
+            "del150/modemi/photo_3.jpg",
+            "del150/modemi/photo_4.jpg",
+            "del150/modemi/photo_5.jpg",
+            "del150/modemi/photo_6.jpg",
+            "del150/modemi/photo_7.jpg",
+        ]
+        media_list = []
+        for phot in photos:
+            file = open(phot, "rb")
+            new_file = telebot.types.InputMediaDocument(file)
+            media_list.append(new_file)
+        bot.send_media_group(message.chat.id, media=media_list)
+    #   bot.send_media_group(
+    #     message.chat.id,
+    #     [
+    #         telebot.types.InputMediaPhoto(open(photo, "rb"))
+    #         for photo in ["photo1", "photo2"]
+    #     ],
+    # )
+
+    # bot.send_media_group(
+
+    #     message.chat.id,
+    #     [
+    #         telebot.types.InputMediaPhoto(open(photo, "rb"))
+    #         for photo in [
+    #             "./del150/modemi/photo_1.jpg",
+    #             "./del150/modemi/photo_2.jpg",
+    #             "./del150/modemi/photo_3.jpg",
+    #             "./del150/modemi/photo_4.jpg",
+    #             "./del150/modemi/photo_5.jpg",
+    #             "./del150/modemi/photo_6.jpg",
+    #             "./del150/modemi/photo_7.jpg",
+    #         ]
+    #     ],
+    #     parse_mode="html",
+    # )
+    # Дэл-150
+    # elif message.text == "Настройка модемов":
+    #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    #     button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
+    #     markup.add(button)
+    #     bot.send_message(
+    #         message.chat.id,
+    #         "Для подключения на ПК следует обновить до последней версии ПО и так же прописать адрес(можно использовать 192.168.1.1 тогда как в ДЭЛ-150 будет 192.168.1.2, шлюз 192.168.1.20) в настройках сети IPv4 тот который будет указан в ДЭЛ-150.\n",
+    #         "Для подключения модемов следует выставить на ДЭЛ-150 шлюз 192.168.1.20 и так же прописать IP пк в соединениях в PLAOUT.\n",
+    #         "В программе выставляем IP адрес ДЭЛ-150\n",
+    #         reply_markup=markup,
+    #         parse_mode="html",
+    #     ),
+
+    #     ph_1_name = "1"
+    #     ph_1 = open("./del150/modemi/photo_1.jpg", "rb")
+
+    #     ph_2_name = "2"
+    #     ph_2 = open("./del150/modemi/photo_2.jpg", "rb")
+
+    #     ph_3_name = "3"
+    #     ph_3 = open("./del150/modemi/photo_3.jpg", "rb")
+
+    #     ph_4_name = "4"
+    #     ph_4 = open("./del150/modemi/photo_4.jpg", "rb")
+
+    #     ph_5_name = "5"
+    #     ph_5 = open("./del150/modemi/photo_5.jpg", "rb")
+
+    #     ph_6_name = "6"
+    #     ph_6 = open("./del150/modemi/photo_6.jpg", "rb")
+
+    #     ph_7_name = "7"
+    #     ph_7 = open("./del150/modemi/photo_7.jpg", "rb")
+
+    #     ph_dirt = {
+    #         ph_1_name: ph_1,
+    #         ph_2_name: ph_2,
+    #         ph_3_name: ph_3,
+    #         ph_4_name: ph_4,
+    #         ph_5_name: ph_5,
+    #         ph_6_name: ph_6,
+    #         ph_7_name: ph_7,
+    #     }
+
+    #     markup.add(button)
+    #     for key, value in ph_dirt.items():
+    #         bot.send_photo(message.chat.id, value, caption=key, parse_mode="html")
+
+    # Дэл-150
     elif message.text == "Распайки" or message.text == "🔙 Распайки":
         markup = types.ReplyKeyboardMarkup()
         btn1 = types.KeyboardButton("Кабель связи")
@@ -184,8 +304,9 @@ def get_text_messages(message):
         btn6 = types.KeyboardButton("Конвертор")
         btn7 = types.KeyboardButton("Датчик ВБИ")
         btn8 = types.KeyboardButton("Датчик ДОЛ(контакты внутри)")
+        button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         # btn9 = types.KeyboardButton("Съемник ДН-130")
-        markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8)
+        markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, button)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Дэл-150
@@ -309,7 +430,7 @@ def get_text_messages(message):
         # Дэл-150
     elif message.text == "Датчик ДОЛ(контакты внутри)":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button = types.KeyboardButton("🔙 Распайки")
+        button = types.KeyboardButton("🔙 вернуться в раздел Дэл-150")
         markup.add(button)
         bot.send_photo(
             message.chat.id,
@@ -337,7 +458,7 @@ def get_text_messages(message):
         bot.send_message(
             message.chat.id,
             "1) Индикация на ЦУПе. Посмотреть индикацию на платах внутри ЦУПа: для датчиков(с синим кондером): индикация постоянно горит(в работе), индикация моргает(не в работе), нет индикации (не работает кроссплата или мк);\n"
-            "для табло(с розовым кондером): нет индикации (в работе), индикация моргает(не в работе);/n"
+            "для табло(с розовым кондером): нет индикации (в работе), индикация моргает(не в работе);\n"
             "2) Проверить целостность кабеля, прозвонить кабель;\n"
             "3) Осмотреть внешне датчик",
             reply_markup=markup,
@@ -381,10 +502,15 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Куб-2")
         markup.add(button)
+        bot.send_message(
+            message.chat.id,
+            "Идет загрузка видео",
+            reply_markup=markup,
+        )
         bot.send_video(
             message.chat.id,
             open("./del150/obnulenie.mp4", "rb"),
-            caption="(Идет загрузка видео)",
+            caption="Обнуление газоанализатора",
             reply_markup=markup,
         )
 
@@ -401,10 +527,11 @@ def get_text_messages(message):
         # Котельная
     elif message.text == "Аргусы" or message.text == "🔙 Аргусы":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+        btn0 = types.KeyboardButton("🔙 Котельные")
         btn1 = types.KeyboardButton("Наладка Аргус")
         btn2 = types.KeyboardButton("Ошибки Аргус")
         btn3 = types.KeyboardButton("Схемы Аргус")
-        markup.add(btn1, btn2, btn3)
+        markup.add(btn1, btn2, btn3, btn0)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Котельная
@@ -469,14 +596,15 @@ def get_text_messages(message):
         # Котельная
     elif message.text == "Новые щиты" or message.text == "🔙 Новые щиты":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
-        btn1 = types.KeyboardButton("Наладка Щиты")
-        btn2 = types.KeyboardButton("Ошибки Щиты")
-        btn3 = types.KeyboardButton("Схемы и длина кабелей Щиты")
-        markup.add(btn1, btn2, btn3)
+        btn0 = types.KeyboardButton("🔙 Котельные")
+        btn1 = types.KeyboardButton("Наладка Щитов")
+        btn2 = types.KeyboardButton("Ошибки Щитов")
+        btn3 = types.KeyboardButton("Схемы и длина кабелей Щитов")
+        markup.add(btn1, btn2, btn3, btn0)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Котельная
-    elif message.text == "Наладка Щиты":
+    elif message.text == "Наладка Щитов":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Новые щиты")
         markup.add(button)
@@ -491,7 +619,7 @@ def get_text_messages(message):
         ),
 
         # Котельная
-    elif message.text == "Ошибки Щиты":
+    elif message.text == "Ошибки Щитов":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Новые щиты")
         markup.add(button)
@@ -505,7 +633,7 @@ def get_text_messages(message):
         ),
 
         # Котельная
-    elif message.text == "Схемы и длина кабелей Щиты":
+    elif message.text == "Схемы и длина кабелей Щитов":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
         button = types.KeyboardButton("🔙 Новые щиты")
         markup.add(button)
@@ -517,7 +645,7 @@ def get_text_messages(message):
 
         bot.send_message(
             message.chat.id,
-            """Распайка пламени: 1 - плюс 2 - ничего 3 - минус 4 - реле 5 - реле""",
+            "Распайка пламени: 1 - плюс 2 - ничего 3 - минус 4 - реле 5 - реле",
             reply_markup=markup,
             parse_mode="html",
         ),
@@ -541,7 +669,7 @@ def get_text_messages(message):
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            open("./snim.jpg", "rb"),
             reply_markup=markup,
         )
 
@@ -552,7 +680,7 @@ def get_text_messages(message):
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            open("./snim.jpg", "rb"),
             reply_markup=markup,
         )
 
@@ -563,7 +691,7 @@ def get_text_messages(message):
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            open("./snim.jpg", "rb"),
             reply_markup=markup,
         )
 
@@ -584,7 +712,7 @@ def get_text_messages(message):
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            open("./snim.jpg", "rb"),
             reply_markup=markup,
         )
 
@@ -595,7 +723,7 @@ def get_text_messages(message):
         markup.add(button)
         bot.send_photo(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            open("./snim.jpg", "rb"),
             reply_markup=markup,
         )
 
@@ -604,9 +732,9 @@ def get_text_messages(message):
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
         btn0 = types.KeyboardButton("🔙 Главное меню")
         btn1 = types.KeyboardButton("Схема блокировки по штропам")
-        btn2 = types.KeyboardButton("Схемы2, Схемы")
-        btn3 = types.KeyboardButton("Схемы3, Схемы, Схемы")
-        markup.add(btn1, btn2, btn3, btn0)
+        # btn2 = types.KeyboardButton("Схемы2, Схемы")
+        # btn3 = types.KeyboardButton("Схемы3, Схемы, Схемы")
+        markup.add(btn1, btn0)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
 
         # Схемы
@@ -621,25 +749,93 @@ def get_text_messages(message):
         )
 
         # Схемы
-    elif message.text == "Схемы2, Схемы":
+    # elif message.text == "Схемы2, Схемы":
+    #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    #     button = types.KeyboardButton("🔙 Схемы")
+    #     markup.add(button)
+    #     bot.send_photo(
+    #         message.chat.id,
+    #         open("./snim.jpg", "rb"),
+    #         reply_markup=markup,
+    #     )
+
+    # Схемы
+    # elif message.text == "Схемы3, Схемы, Схемы":
+    #     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    #     button = types.KeyboardButton("🔙 Схемы")
+    #     markup.add(button)
+    #     bot.send_photo(
+    #         message.chat.id,
+    #         open("./snim.jpg", "rb"),
+    #         reply_markup=markup,
+    #     )
+
+    # Документация, акта
+    elif message.text == "Документация, акта":
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)
+        btn0 = types.KeyboardButton("🔙 Главное меню")
+        btn1 = types.KeyboardButton("Акта")
+        btn2 = types.KeyboardButton("Документация del-150")
+        # btn3 = types.KeyboardButton("а")
+        markup.add(btn1, btn2, btn0)
+        bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
+
+        # Документация, акта
+    elif message.text == "Акта":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button = types.KeyboardButton("🔙 Схемы")
+        button = types.KeyboardButton("🔙 Документация, акта")
         markup.add(button)
-        bot.send_photo(
+        bot.send_message(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            "Идет загрузка документации",
             reply_markup=markup,
+            parse_mode="html",
+        ),
+        doc_1 = open("./del150/doc/marshrutka.pdf", "rb")
+        bot.send_document(
+            message.chat.id,
+            doc_1,
+            caption=("Маршрутка"),
+            parse_mode="html",
         )
-        # Схемы
-    elif message.text == "Схемы3, Схемы, Схемы":
+
+        # Документация, акта
+    elif message.text == "Документация del-150":
         markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        button = types.KeyboardButton("🔙 Схемы")
+        button = types.KeyboardButton("🔙 Документация, акта")
         markup.add(button)
-        bot.send_photo(
+        bot.send_message(
             message.chat.id,
-            open("./Снимок-экрана-2021-09-07-в-19.48.05.jpg", "rb"),
+            "Идет загрузка документации",
             reply_markup=markup,
-        )
+            parse_mode="html",
+        ),
+        doc_1_name = "Документация ДЭЛ-150"
+        doc_1 = open("./del150/doc/skpb_del.pdf", "rb")
+
+        doc_2_name = "Газоанализатор"
+        doc_2 = open("./del150/doc/gazoanalizator-2023-v-1-15-0.pdf", "rb")
+
+        doc_3_name = "Датчик веса ДН-130"
+        doc_3 = open("./del150/doc/dn-130.pdf", "rb")
+
+        doc_4_name = "Датчик оборота лебедки ДПС-140"
+        doc_4 = open("./del150/doc/re_dps_dol_2023.pdf", "rb")
+
+        doc_5_name = "Датчик уровня У-150"
+        doc_5 = open("./del150/doc/re_yroven_u-150.pdf", "rb")
+
+        doc_dirt = {
+            doc_1_name: doc_1,
+            doc_2_name: doc_2,
+            doc_3_name: doc_3,
+            doc_4_name: doc_4,
+            doc_5_name: doc_5,
+        }
+
+        markup.add(button)
+        for key, value in doc_dirt.items():
+            bot.send_document(message.chat.id, value, caption=key, parse_mode="html")
 
     else:
         message.text == "Информация о боте"
