@@ -3,6 +3,9 @@ import os
 from telebot import types
 from dotenv import load_dotenv
 
+from bot.services.fgis_parser import FgisParser
+from bot.services.constants import DN, TP, GSV
+
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
@@ -12,31 +15,34 @@ bot = telebot.TeleBot(TOKEN)
 
 # Главное меню
 @bot.message_handler(commands=["start"])
-def get_text_messages(message):
-    markup = types.ReplyKeyboardMarkup()
-    btn1 = types.KeyboardButton("Дэл-150")
-    btn2 = types.KeyboardButton("Куб-2")
-    btn3 = types.KeyboardButton("Котельные")
-    btn4 = types.KeyboardButton("Переносной газик")
-    btn5 = types.KeyboardButton("Схемы")
-    btn6 = types.KeyboardButton("Документация, акта")
-    markup.row(btn1, btn2, btn3, btn4, btn5, btn6)
-    bot.send_message(message.chat.id, "Напиши, что тебе нужно", reply_markup=markup)
+def start(message):
+    message.text = 'Главное меню'
+    get_text_messages(message)
 
 
 @bot.message_handler(content_types=["text"])
 def get_text_messages(message):
     # Главное меню
     if message.text == "Главное меню" or message.text == "🔙 Главное меню":
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=False)
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=False, row_width=2)
         btn1 = types.KeyboardButton("Дэл-150")
         btn2 = types.KeyboardButton("Куб-2")
         btn3 = types.KeyboardButton("Котельные")
         btn4 = types.KeyboardButton("Переносной газик")
         btn5 = types.KeyboardButton("Схемы")
         btn6 = types.KeyboardButton("Документация, акта")
-        markup.add(btn1, btn2, btn3, btn4, btn5, btn6)
+        btn7 = types.KeyboardButton("Проверка СИ")
+        markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7)
         bot.send_message(message.chat.id, "Выбери нужное", reply_markup=markup)
+
+    elif message.text == "Проверка СИ":
+        markup = types.InlineKeyboardMarkup(row_width=1)
+        button_1 = types.InlineKeyboardButton(f'{DN}', callback_data=f'parser "{DN}"')
+        button_2 = types.InlineKeyboardButton(f'{TP}', callback_data=f'parser "{TP}"')
+        button_3 = types.InlineKeyboardButton(f'{GSV}', callback_data=f'parser "{GSV}"')
+        button_4 = types.InlineKeyboardButton("Ввести тип и номер", callback_data='parser')
+        markup.add(button_1, button_2, button_3, button_4)
+        bot.send_message(message.chat.id, text="Проверка СИ", reply_markup=markup)
 
         # Дэл-150
     elif message.text == "Дэл-150" or message.text == "🔙 вернуться в раздел Дэл-150":
@@ -847,6 +853,68 @@ def get_text_messages(message):
             "Переходи в главное меню",
             reply_markup=markup,
         )
+
+
+@bot.callback_query_handler(func=lambda call: call.data == f'parser "{DN}"')
+def parser_dn(call):
+    call.message.text = f'{DN}'
+    bot.send_message(call.message.chat.id, "Проверяю данные СИ")
+    return parser_constants(call.message)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == f'parser "{TP}"')
+def parser_tp(call):
+    call.message.text = f'{TP}'
+    bot.send_message(call.message.chat.id, "Проверяю данные СИ")
+    return parser_constants(call.message)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == f'parser "{GSV}"')
+def parser_gsv(call):
+    call.message.text = f'{GSV}'
+    bot.send_message(call.message.chat.id, "Проверяю данные СИ")
+    return parser_constants(call.message)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == 'parser')
+def parser(call):
+    bot.send_message(call.message.chat.id, "Введи тип и номер:")
+    bot.register_next_step_handler(call.message, parser_custom)
+
+
+def parser_constants(message):
+    test_fixture = {
+        'self': FgisParser,
+        'suitability': True,
+        'sensor_type': f'{message.text}',
+    }
+    return start_parsing(message, test_fixture)
+
+
+def parser_custom(message):
+    text = message.text.split(" ")
+    if text is not None and len(text) > 0:
+        test_fixture = {
+            'self': FgisParser,
+            'suitability': True,
+            'sensor_type': text[0] if len(text) >= 1 else '',
+            'sensor_number': text[1] if len(text) > 1 else '',
+        }
+    else:
+        return bot.send_message(message.chat.id, "Ошибка ввода, повторите команду")
+    return start_parsing(message, test_fixture)
+
+
+def start_parsing(message, test_fixture):
+    rows = FgisParser.get_calibration_info(**test_fixture)
+    if len(rows) > 100:
+        return bot.send_message(
+            message.chat.id,
+            "Ошибка поиска, проверьте корректность заименования и номера СИ.",
+        )
+    for row in rows:
+        text = row[0] + ' ' + row[1] + ' ' + row[2] + ' ' + row[3]
+        bot.send_message(message.chat.id, text)
 
 
 if __name__ == "__main__":
