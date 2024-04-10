@@ -1,18 +1,35 @@
+import os
+
+from dotenv import load_dotenv
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.webdriver import WebDriver
 
 from bot.services.constants import PARSING_URL
+
+load_dotenv()
+
+DEV_MODE = os.getenv("DEV_MODE")
+print(DEV_MODE)
 
 
 class FgisParser:
 
-    def __driver_settings(self) -> webdriver.Chrome:
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-        return driver
+    def __driver_settings() -> WebDriver:
+        chrome_options_ = Options()
+        chrome_options_.add_argument('--verbose')
+        chrome_options_.add_argument('--headless')
+        chrome_options_.binary_location = '/usr/bin/google-chrome'
+        if not DEV_MODE:
+            chrome_options_.binary_location = '/usr/bin/chromium-browser'
+        chrome_options_.binary_location = '/usr/bin/google-chrome'
+        chrome_options_.add_argument('--no-sandbox')
+        chrome_options_.add_argument('--disable-dev-shm-usage')
+        driver_ = webdriver.Chrome(options=chrome_options_)
+        return driver_
 
     def get_calibration_info(
             self, suitability: bool = True, sensor_type: str = '', sensor_number: str = ''
@@ -22,9 +39,8 @@ class FgisParser:
         if sensor_number is None:
             sensor_number = ''
 
-        driver: webdriver.Chrome = self.__driver_settings(self)
+        driver: webdriver.Chrome = self.__driver_settings()
         url = PARSING_URL.format(suitability, sensor_type, sensor_number)
-        print(url)
         driver.get(url)
 
         wait = WebDriverWait(driver, 20)
